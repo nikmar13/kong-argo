@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong
+  namespace: argocd
+spec:
+  destination:
+    name: 'in-cluster'
+    namespace: kong
+  source:
+    path: ''
+    repoURL: 'https://charts.konghq.com'
+    targetRevision: 2.8.2
+    chart: kong
+#     helm:
+#       parameters:
+#         - name: clusterName
+#           value: {{ .Values.clusterName | quote}}
+#         - name: clusterEndpoint
+#           value: {{ .Values.clusterEndpoint | quote}}
+#         - name: aws.defaultInstanceProfile
+#           value: {{ .Values.aws.defaultInstanceProfile | quote}}
+#         - name: serviceAccount.annotations.eks\.amazonaws\.com/role-arn
+#           value: {{ .Values.iamRoleARN }}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
